@@ -4,6 +4,7 @@
 
   {% with range as double_range %}
 
+
     {% if page_num %}
       <div class="card my-2">
         <div class="card-body">
@@ -16,18 +17,20 @@
 
       <div class="col-lg-8">
 
-        {% for i in double_range %}
+
+        {% for post in posts %}
           <div class="card my-2">
             <div class="card-body">
-              <h5 class="card-title">{{ news_title }}</h5>
+              <h5 class="card-title">{{ post.news_title }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">
-                {{ datetime_obj|date:"Y-m-d h-i-s" }}
+                {{ post.datetime_obj}}
               </h6>
-              <p class="card-text">{{ news_preview }}</p>
-              <a href="#" class="card-link">Подробнее</a>
+              <p class="card-text">{{ post.news_preview }}</p>
+              <a href="{{ post.url_link }}" class="card-link">Подробнее</a>
             </div>
           </div>
         {% endfor %}
+
 
       </div>
 
@@ -57,6 +60,7 @@
           </div>
         </div>
       </div>
+
 
     </div>
 
