@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "social_django",
     "mainapp",
     "authapp",
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [
@@ -171,3 +172,5 @@ SOCIAL_AUTH_STEAM_API_KEY = "A709414B778D319627C5ED922AC112E9"
 SOCIAL_AUTH_STEAM_EXTRA_DATA = ["username"]
 
 # SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
