@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "mainapp",
     "authapp",
     "crispy_forms",
+    "django_admin_filters",
+    "rangefilter",
 ]
 
 MIDDLEWARE = [
