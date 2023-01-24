@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "mainapp",
     "authapp",
     "crispy_forms",
+    "debug_toolbar",
     "django_admin_filters",
     "rangefilter",
 ]
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -201,4 +203,26 @@ LOGGING = {
             "handlers": ["file"],
         },
     },
+}
+
+# Redis
+ALLOWED_HOSTS = ["*"]
+# Redis
+if DEBUG:
+    INTERNAL_IPS = [
+        "192.168.42.139",
+        "192.168.42.1",
+        "127.0.0.1",
+    ]
+
+
+# Redis In the end of file
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
 }
