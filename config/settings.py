@@ -231,21 +231,23 @@ CACHES = {
 CELERY_BROKER_URL = "redis://localhost:6379"
 CELERY_RESULT_BACKEND = "redis://localhost:6379"
 
-# Read about sending email:
-#   https://docs.djangoproject.com/en/3.2/topics/email/
 
 # Full list of email settings:
 #   https://docs.djangoproject.com/en/3.2/ref/settings/#email
-# EMAIL_HOST = "localhost"
-# EMAIL_PORT = "25"
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_PORT = "465"
 
 # For debugging: python -m smtpd -n -c DebuggingServer localhost:25
-# EMAIL_HOST_USER = "django@geekshop.local"
-# EMAIL_HOST_PASSWORD = "geekshop"
-# EMAIL_USE_SSL = False
-# If server support TLS:
-# EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "levonAS0@yandex.ru"
+EMAIL_HOST_PASSWORD = "XXXXXX"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 # Email as files for debug
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = "var/email-messages/"

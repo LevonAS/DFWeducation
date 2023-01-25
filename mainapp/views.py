@@ -1,4 +1,5 @@
 import logging
+from collections import deque
 
 from django.conf import settings
 from django.contrib import messages
@@ -121,7 +122,7 @@ class ContactsPageView(TemplateView):
                 cache.set(
                     f"mail_feedback_lock_{self.request.user.pk}",
                     "lock",
-                    timeout=300,
+                    timeout=10,
                 )
                 messages.add_message(self.request, messages.INFO, _("Message sended"))
                 mainapp_tasks.send_feedback_mail.delay(
@@ -150,9 +151,8 @@ class LogView(TemplateView):
         context = super(LogView, self).get_context_data(**kwargs)
         log_slice = []
         with open(settings.LOG_FILE, "r") as log_file:
-            for i, line in enumerate(log_file):
-                if i == 1000:  # first 1000 lines
-                    break
+            num = 15  # Количество выводимых строк
+            for i, line in enumerate(deque(log_file, num)):
                 log_slice.insert(0, line)  # append at start
             context["log"] = "".join(log_slice)
         return context
