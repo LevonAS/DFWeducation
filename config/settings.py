@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     "mainapp",
     "authapp",
     "crispy_forms",
-    "django_admin_filters",
+    "debug_toolbar",
+    #    "django_admin_filters",
     "rangefilter",
 ]
 
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -176,3 +178,76 @@ SOCIAL_AUTH_STEAM_EXTRA_DATA = ["username"]
 # SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+LOG_FILE = BASE_DIR / "var" / "log" / "main_log.log"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "console": {"format": "[%(asctime)s] %(levelname)s %(name)s (%(lineno)d) %(message)s"},
+    },
+    "handlers": {
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": LOG_FILE,
+            "formatter": "console",
+        },
+        "console": {"class": "logging.StreamHandler", "formatter": "console"},
+    },
+    "loggers": {
+        "django": {"level": "INFO", "handlers": ["console"]},
+        "mainapp": {
+            "level": "DEBUG",
+            "handlers": ["file"],
+        },
+    },
+}
+
+# Redis
+ALLOWED_HOSTS = ["*"]
+# Redis
+if DEBUG:
+    INTERNAL_IPS = [
+        "192.168.42.139",
+        "192.168.42.1",
+        "127.0.0.1",
+    ]
+
+
+# Redis In the end of file
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+# Celery
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+
+# Full list of email settings:
+#   https://docs.djangoproject.com/en/3.2/ref/settings/#email
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_PORT = "465"
+
+# For debugging: python -m smtpd -n -c DebuggingServer localhost:25
+EMAIL_HOST_USER = "levonAS0@yandex.ru"
+EMAIL_HOST_PASSWORD = "XXXXXX"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+SERVER_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+# Email as files for debug
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = "var/email-messages/"
