@@ -151,7 +151,7 @@ class LogView(TemplateView):
         context = super(LogView, self).get_context_data(**kwargs)
         log_slice = []
         with open(settings.LOG_FILE, "r") as log_file:
-            num = 15  # Количество выводимых строк
+            num = 5  #
             for i, line in enumerate(deque(log_file, num)):
                 log_slice.insert(0, line)  # append at start
             context["log"] = "".join(log_slice)
