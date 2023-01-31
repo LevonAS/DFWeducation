@@ -26,7 +26,7 @@ class MainPageView(TemplateView):
 
 class NewsListView(ListView):
     model = mainapp_models.News
-    paginate_by = 5
+    paginate_by = 4
 
     def get_queryset(self):
         return super().get_queryset().filter(deleted=False)
@@ -56,13 +56,25 @@ class NewsDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = ("mainapp.delete_news",)
 
 
-class CoursesListView(TemplateView):
-    template_name = "mainapp/courses_list.html"
+class CoursesListView(ListView):
+    model = mainapp_models.Courses
+    paginate_by = 3
 
-    def get_context_data(self, **kwargs):
-        context = super(CoursesListView, self).get_context_data(**kwargs)
-        context["objects"] = mainapp_models.Courses.objects.all()[:7]
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(CoursesListView, self).get_context_data(**kwargs)
+    #     context["objects"] = mainapp_models.Courses.objects.all()[:7]
+    #     return context
+    def get_queryset(self):
+        return super().get_queryset()
+
+
+# class CoursesListView(TemplateView):
+#     template_name = "mainapp/courses_list.html"
+
+#     def get_context_data(self, **kwargs):
+#         context = super(CoursesListView, self).get_context_data(**kwargs)
+#         context["objects"] = mainapp_models.Courses.objects.all()[:7]
+#         return context
 
 
 class CoursesDetailView(TemplateView):
@@ -90,6 +102,14 @@ class CoursesDetailView(TemplateView):
                 .select_related()
             )
             cache.set(f"feedback_list_{pk}", context["feedback_list"], timeout=300)  # 5 minutes
+
+            # # Archive object for tests --->
+            # import pickle
+
+            # with open(f"mainapp/fixtures/005_feedback_list_{pk}.bin", "wb") as outf:
+            #     pickle.dump(context["feedback_list"], outf)
+            # # <--- Archive object for tests
+
         else:
             context["feedback_list"] = cached_feedback
 
@@ -151,7 +171,7 @@ class LogView(TemplateView):
         context = super(LogView, self).get_context_data(**kwargs)
         log_slice = []
         with open(settings.LOG_FILE, "r") as log_file:
-            num = 15  # Количество выводимых строк
+            num = 5  #
             for i, line in enumerate(deque(log_file, num)):
                 log_slice.insert(0, line)  # append at start
             context["log"] = "".join(log_slice)
